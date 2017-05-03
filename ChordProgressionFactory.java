@@ -24,123 +24,6 @@ public class ChordProgressionFactory {
 	public static final int CADENCE_PHRYGIAN_HALF = 5;
 	
 	
-	public static String getChordProg(Scale scale, int length) {
-		List<String> chords = new ArrayList<String>();
-		Random r = new Random();
-		
-		if (scale == Scale.MAJOR) {
-			for (int i = 0; i < length; i++) {
-				if (i == 0) {
-					int ri = r.nextInt(2);
-					
-					if (ri == 0) {
-						chords.add("I");
-					} else if (ri == 1) {
-						chords.add("V");
-					}
-//				} else if (i == length - 1) {
-					//TODO
-				} else {
-					String last = chords.get(i - 1);
-					
-					if (last == "I") {
-						int ri = r.nextInt(7);
-						
-						if (ri == 0) {
-							chords.add("I");
-						} else if (ri == 1) {
-							chords.add("ii");
-						} else if (ri == 2) {
-							chords.add("iii");
-						} else if (ri == 3) {
-							chords.add("IV");
-						} else if (ri == 4) {
-							chords.add("V");
-						} else if (ri == 5) {
-							chords.add("vi");
-						} else if (ri == 6) {
-							chords.add("viio");
-						}
-					} else if (last == "ii") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add("ii");
-						} else if (ri == 1) {
-							chords.add("V");
-						} else if (ri == 2) {
-							chords.add("viio");
-						}
-					} else if (last == "iii") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add("iii");
-						} else if (ri == 1) {
-							chords.add("IV");
-						} else if (ri == 2) {
-							chords.add("ii");
-						}
-					} else if (last == "IV") {
-						int ri = r.nextInt(5);
-						
-						if (ri == 0) {
-							chords.add("I");
-						} else if (ri == 1) {
-							chords.add("ii");
-						} else if (ri == 2) {
-							chords.add("IV");
-						} else if (ri == 3) {
-							chords.add("V");
-						} else if (ri == 4) {
-							chords.add("viio");
-						}
-					} else if (last == "V") {
-						int ri = r.nextInt(4);
-						
-						if (ri == 0) {
-							chords.add("I");
-						} else if (ri == 1) {
-							chords.add("V");
-						} else if (ri == 2) {
-							chords.add("vi");
-						} else if (ri == 3) {
-							chords.add("viio");
-						}
-					} else if (last == "vi") {
-						int ri = r.nextInt(10);
-						
-						if (ri != 0) {
-							chords.add("iii");
-						} else {
-							chords.add("vi");
-						}
-					} else if (last == "viio") {
-						int ri = r.nextInt(10);
-						
-						if (ri != 0) {
-							chords.add("I");
-						} else {
-							chords.add("viio");
-						}
-					}
-				}
-			}
-			
-			
-			String retStr = "";
-			
-			for (String c : chords) {
-				retStr += c + " ";
-			}
-			
-			return retStr;
-		} else if (scale == Scale.MINOR) {
-			
-		}
-		
-		return null;
-	}
 	public static String getBetterChordProg(Scale scale, int length) {
 		List<String> chords = new ArrayList<String>();
 		Random r = new Random();
@@ -155,8 +38,6 @@ public class ChordProgressionFactory {
 					} else if (ri == 1) {
 						chords.add("V");
 					}
-//				} else if (i == length - 1) {
-					//TODO
 				} else {
 					String next = chords.get(0);
 					
@@ -181,12 +62,12 @@ public class ChordProgressionFactory {
 							chords.add(0, "IV");
 						}
 					} else if (next == "iii") {
-						int ri = r.nextInt(2);
+						int ri = r.nextInt(10);
 						
-						if (ri == 0) {
+						if (ri != 0) {
 							chords.add(0, "I");
-						} else if (ri == 1) {
-							chords.add(0, "vi");
+						} else {
+							chords.add(0, "viio");
 						}
 					} else if (next == "IV") {
 						int ri = r.nextInt(2);
@@ -227,20 +108,104 @@ public class ChordProgressionFactory {
 					}
 				}
 			}
-			
-			String retStr = "";
-			
-			for (String c : chords) {
-				retStr += c + " ";
-			}
-			
-			retStr.trim();
-			
-			return retStr;
 		} else if (scale == Scale.MINOR) {
-			
+			for (int i = 0; i < length; i++) {
+				if (i == 0) {
+					int ri = r.nextInt(2);
+					
+					if (ri == 0) {
+						chords.add("i");
+					} else if (ri == 1) {
+						chords.add("V");
+					}
+				} else {
+					String next = chords.get(0);
+					
+					if (next == "i") {
+						int ri = r.nextInt(6);
+						
+						if (ri >= 0 && ri <= 1) {
+							chords.add(0, "iv");
+						} else if (ri >= 2 && ri <= 4) {
+							chords.add(0, "V");
+						} else if (ri == 5) {
+							chords.add(0, "viio");
+						}
+					} else if (next == "iio") {
+						int ri = r.nextInt(3);
+						
+						if (ri == 0) {
+							chords.add(0, "i");
+						} else if (ri == 1) {
+							chords.add(0, "III");
+						} else if (ri == 2) {
+							chords.add(0, "iv");
+						}
+					} else if (next == "III") {
+						int ri = r.nextInt(2);
+						
+						if (ri == 0) {
+							chords.add(0, "i");
+						} else if (ri == 1) {
+							chords.add(0, "VII");
+						}
+					} else if (next == "iv") {
+						int ri = r.nextInt(2);
+						
+						if (ri == 0) {
+							chords.add(0, "i");
+						} else if (ri == 1) {
+							chords.add(0, "III");
+						}
+					} else if (next == "V") {
+						int ri = r.nextInt(3);
+						
+						if (ri == 0) {
+							chords.add(0, "i");
+						} else if (ri == 1) {
+							chords.add(0, "iio");
+						} else if (ri == 2) {
+							chords.add(0, "iv");
+						}
+					} else if (next == "VI") {
+						int ri = r.nextInt(2);
+						
+						if (ri == 0) {
+							chords.add(0, "i");
+						} else {
+							chords.add(0, "V");
+						}
+					} else if (next == "viio") {
+						int ri = r.nextInt(3);
+						
+						if (ri == 0) {
+							chords.add(0, "I");
+						} else if (ri == 1) {
+							chords.add(0, "ii");
+						} else if (ri == 2) {
+							chords.add(0, "IV");
+						}
+					} else if (next == "VII") {
+						int ri = r.nextInt(10);
+						
+						if (ri != 0) {
+							chords.add(0, "I");
+						} else {
+							chords.add(0, "iv");
+						}
+					}
+				}
+			}
 		}
 		
-		return null;
+		String retStr = "";
+		
+		for (String c : chords) {
+			retStr += c + " ";
+		}
+		
+		retStr.trim();
+		
+		return retStr;
 	}
 }
