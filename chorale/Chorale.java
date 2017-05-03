@@ -46,14 +46,11 @@ public class Chorale {
 		
 		cp.setKey(key);
 		
-		System.out.println(romanProg);
-		
 		
 		//Create bassline
 		for (Chord c : cp.getChords()) {
 			bass.add(new Note(c.getBassNote().getOriginalString() + "3"));
 		}
-		System.out.print("\n");
 		
 		//Create Melody
 		soprano.add(Melody.getFirstNote(cp.getChords()[0]));
@@ -135,6 +132,79 @@ public class Chorale {
 			e.printStackTrace();
 		}
 	}
+	
+	public String toASCII() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("S: ");
+		for (Note n : soprano) {
+			String str = n.getToneString();
+			
+			if (str.length() == 2) {
+				str += ' ';
+			}
+			str += "  ";
+			
+			sb.append(str);
+		}
+		sb.append("\nA: ");
+		for (Note n : alto) {
+			String str = n.getToneString();
+			
+			if (str.length() == 2) {
+				str += ' ';
+			}
+			str += "  ";
+			
+			sb.append(str);
+		}
+		sb.append("\nT: ");
+		for (Note n : tenor) {
+			String str = n.getToneString();
+			
+			if (str.length() == 2) {
+				str += ' ';
+			}
+			str += "  ";
+			
+			sb.append(str);
+		}
+		sb.append("\nB: ");
+		for (Note n : bass) {
+			String str = n.getToneString();
+			
+			if (str.length() == 2) {
+				str += ' ';
+			}
+			str += "  ";
+			
+			sb.append(str);
+		}
+		
+		String key = Note.getToneStringWithoutOctave(this.key.getRoot().getValue());
+		if (this.key.getScale() == Scale.MINOR) {
+			key.toLowerCase();
+		}
+		sb.append("\n" + key + ": ");
+		
+		String[] split = romanProg.split("\\s");
+		for (String str : split) {
+			sb.append(str);
+			if (str.length() == 4) {
+				sb.append(" ");
+			} else if (str.length() == 3) {
+				sb.append("  ");
+			} else if (str.length() == 2) {
+				sb.append("   ");
+			} else if (str.length() == 1) {
+				sb.append("    ");
+			}
+		}
+		sb.append("  ");
+		
+		return sb.toString();
+	}
+	
 	
 	public void check() {
 		for (int i = 1; i < cp.getChords().length; i++) {
