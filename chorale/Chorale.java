@@ -23,6 +23,7 @@ public class Chorale {
 	private ChordProgression cp;
 	private String romanProg;
 	private Key key;
+	private int tsTop, tsBottom;
 	
 	/**
 	 * @param key The key that the chorle will be in
@@ -32,6 +33,9 @@ public class Chorale {
 	**/
 	public Chorale(Key key, int length, int tsTop, int tsBottom) {
 		this.key = key;
+		this.tsTop = tsTop;
+		this.tsBottom = tsBottom;
+		
 		Random gen = new Random();
 		
 		//Initialize voices
@@ -91,12 +95,20 @@ public class Chorale {
 		
 		stacc += "V1 ";
 		for (Note n : alto) {
-			stacc += n.getToneString() + " ";
+			if (n != null) {
+				stacc += n.getToneString() + " ";
+			} else {
+				stacc += "NUL ";
+			}
 		}
 		
 		stacc += "V2 ";
 		for (Note n : tenor) {
-			stacc += n.getToneString() + " ";
+			if (n != null) {
+				stacc += n.getToneString() + " ";
+			} else {
+				stacc += "NUL ";
+			}
 		}
 		
 		stacc += "V3 ";
@@ -132,77 +144,84 @@ public class Chorale {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String toASCII() {
-		StringBuilder sb = new StringBuilder();
+		return toASCII(0, soprano.size());
+	}
+	
+	public String toASCII(int start, int stop) {
+		StringBuilder sbS = new StringBuilder();
+		StringBuilder sbA = new StringBuilder();
+		StringBuilder sbT = new StringBuilder();
+		StringBuilder sbB = new StringBuilder();
+		StringBuilder sbC = new StringBuilder();
 		
-		sb.append("S: ");
-		for (Note n : soprano) {
-			String str = n.getToneString();
-			
-			if (str.length() == 2) {
-				str += ' ';
-			}
-			str += "  ";
-			
-			sb.append(str);
-		}
-		sb.append("\nA: ");
-		for (Note n : alto) {
-			String str = n.getToneString();
-			
-			if (str.length() == 2) {
-				str += ' ';
-			}
-			str += "  ";
-			
-			sb.append(str);
-		}
-		sb.append("\nT: ");
-		for (Note n : tenor) {
-			String str = n.getToneString();
-			
-			if (str.length() == 2) {
-				str += ' ';
-			}
-			str += "  ";
-			
-			sb.append(str);
-		}
-		sb.append("\nB: ");
-		for (Note n : bass) {
-			String str = n.getToneString();
-			
-			if (str.length() == 2) {
-				str += ' ';
-			}
-			str += "  ";
-			
-			sb.append(str);
-		}
+		sbS.append("S: ");
+		sbA.append("\nA: ");
+		sbT.append("\nT: ");
+		sbB.append("\nB: ");
 		
 		String key = Note.getToneStringWithoutOctave(this.key.getRoot().getValue());
+		
 		if (this.key.getScale() == Scale.MINOR) {
 			key.toLowerCase();
 		}
-		sb.append("\n" + key + ": ");
+		sbC.append("\n" + key + ": ");
 		
 		String[] split = romanProg.split("\\s");
-		for (String str : split) {
-			sb.append(str);
-			if (str.length() == 4) {
-				sb.append(" ");
-			} else if (str.length() == 3) {
-				sb.append("  ");
-			} else if (str.length() == 2) {
-				sb.append("   ");
-			} else if (str.length() == 1) {
-				sb.append("    ");
+		
+		
+		for (int i = start; i < stop; i++) {
+			String strS = soprano.get(i).getToneString();
+			String strA = alto.get(i).getToneString();
+			String strT = tenor.get(i).getToneString();
+			String strB = bass.get(i).getToneString();
+			
+			if (strS.length() == 2) {
+				strS += ' ';
+			}
+			strS += "  ";
+
+			if (strA.length() == 2) {
+				strA += ' ';
+			}
+			strA += "  ";
+			
+			if (strT.length() == 2) {
+				strT += ' ';
+			}
+			strT += "  ";
+			
+			if (strB.length() == 2) {
+				strB += ' ';
+			}
+			strB += "  ";
+			
+			
+			sbS.append(strS);
+			sbA.append(strA);
+			sbT.append(strT);
+			sbB.append(strB);
+			
+			
+			sbC.append(split[i]);
+			if (split[i].length() == 4) {
+				sbC.append(" ");
+			} else if (split[i].length() == 3) {
+				sbC.append("  ");
+			} else if (split[i].length() == 2) {
+				sbC.append("   ");
+			} else if (split[i].length() == 1) {
+				sbC.append("    ");
 			}
 		}
-		sb.append("  ");
 		
-		return sb.toString();
+		
+		return sbS.toString() + sbA.toString() + sbT.toString() + sbB.toString() + sbC.toString();
+	}
+	
+	public int getTimeSigBottom() {
+		return tsBottom;
 	}
 	
 	

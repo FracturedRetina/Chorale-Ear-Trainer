@@ -66,14 +66,27 @@ public class Window extends javax.swing.JFrame {
 		create.setText("Create");
 		create.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (mode.getSelectedItem() == "Major") {
-					chorale = new Chorale(new Key((String) key.getSelectedItem()), (Integer) measures.getValue());
-				} else if (mode.getSelectedItem() == "Minor") {
-					chorale = new Chorale(new Key(((String) key.getSelectedItem()) + "min"), (Integer) measures.getValue());
-				}
-				JOptionPane.showMessageDialog(null, "Successfully created chorale");
-				output.setText("<hidden>");
+			public void actionPerformed(ActionEvent event) {
+				try {
+					if (mode.getSelectedItem() == "Major") {
+						chorale = new Chorale(new Key((String) key.getSelectedItem()), (int) measures.getValue());
+					} else if (mode.getSelectedItem() == "Minor") {
+						chorale = new Chorale(new Key(((String) key.getSelectedItem()) + "min"), (int) measures.getValue());
+					}
+					
+					JOptionPane.showMessageDialog(null, "Successfully created chorale");
+
+					StringBuilder sb = new StringBuilder();
+					
+					for (int i = 0; i < (int) measures.getValue() * chorale.getTimeSigBottom() - 1; i++) {
+						sb.append("?    ");
+					}
+					sb.append("\n");
+					output.setText(chorale.toASCII(0, 1).replaceAll("$|\\n", sb.toString()).trim());
+				} catch (Exception e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Something went wrong.");
+				}				
 			}
 		});
 		content.add(create);

@@ -121,7 +121,7 @@ public class ChordProgressionFactory {
 				} else {
 					String next = chords.get(0);
 					
-					if (next == "i") {
+					if (next == "i" || next == "I") {
 						int ri = r.nextInt(6);
 						
 						if (ri >= 0 && ri <= 1) {
@@ -179,7 +179,7 @@ public class ChordProgressionFactory {
 						int ri = r.nextInt(3);
 						
 						if (ri == 0) {
-							chords.add(0, "I");
+							chords.add(0, "i");
 						} else if (ri == 1) {
 							chords.add(0, "ii");
 						} else if (ri == 2) {
@@ -189,7 +189,7 @@ public class ChordProgressionFactory {
 						int ri = r.nextInt(10);
 						
 						if (ri != 0) {
-							chords.add(0, "I");
+							chords.add(0, "i");
 						} else {
 							chords.add(0, "iv");
 						}
