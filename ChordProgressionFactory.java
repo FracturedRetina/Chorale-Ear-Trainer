@@ -1,7 +1,9 @@
 package com.eshimoniak.choraleeartrainer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.jfugue.theory.Scale;
@@ -24,7 +26,34 @@ public class ChordProgressionFactory {
 	public static final int CADENCE_PHRYGIAN_HALF = 5;
 	
 	
-	public static String getBetterChordProg(Scale scale, int length) {
+	/**Reversed flow of root position chords in major**/
+	public static Map<String, String[]> majorFlow = new HashMap<String, String[]>();
+	static {
+		majorFlow.put("I",    new String[] {"IV", "V",   "viio"});
+		majorFlow.put("ii",   new String[] {"I",  "iii", "IV"});
+		majorFlow.put("iii",  new String[] {"I"});
+		majorFlow.put("IV",   new String[] {"I",  "iii", "vi"});
+		majorFlow.put("V",    new String[] {"I",  "ii",  "IV"});
+		majorFlow.put("vi",   new String[] {"I",  "iii", "V"});
+		majorFlow.put("viio", new String[] {"I",  "ii",  "IV", "V"});
+	}
+	
+	/**Reversed flow of root position chords in minor**/
+	public static Map<String, String[]> minorFlow = new HashMap<String, String[]>();
+	static {
+		minorFlow.put("i",    new String[] {"iv", "V",   "viio"});
+		minorFlow.put("I",    new String[] {"iv", "V",   "viio"});
+		minorFlow.put("iio",  new String[] {"i",  "III", "iv"});
+		minorFlow.put("III",  new String[] {"i",  "VII"});
+		minorFlow.put("iv",   new String[] {"i",  "III", "VI"});
+		minorFlow.put("V",    new String[] {"i",  "iio", "iv"});
+		minorFlow.put("VI",   new String[] {"i",  "III", "V"});
+		minorFlow.put("VII",  new String[] {"i"});
+		minorFlow.put("viio", new String[] {"i",  "iio", "iv", "V"});
+	}
+	
+	
+	public static String getChordProg(Scale scale, int length) {
 		List<String> chords = new ArrayList<String>();
 		Random r = new Random();
 		
@@ -39,73 +68,8 @@ public class ChordProgressionFactory {
 						chords.add("V");
 					}
 				} else {
-					String next = chords.get(0);
-					
-					if (next == "I") {
-						int ri = r.nextInt(6);
-						
-						if (ri >= 0 && ri <= 1) {
-							chords.add(0, "IV");
-						} else if (ri >= 2 && ri <= 4) {
-							chords.add(0, "V");
-						} else if (ri == 5) {
-							chords.add(0, "viio");
-						}
-					} else if (next == "ii") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add(0, "I");
-						} else if (ri == 1) {
-							chords.add(0, "iii");
-						} else if (ri == 2) {
-							chords.add(0, "IV");
-						}
-					} else if (next == "iii") {
-						int ri = r.nextInt(10);
-						
-						if (ri != 0) {
-							chords.add(0, "I");
-						} else {
-							chords.add(0, "viio");
-						}
-					} else if (next == "IV") {
-						int ri = r.nextInt(2);
-						
-						if (ri == 0) {
-							chords.add(0, "I");
-						} else if (ri == 1) {
-							chords.add(0, "iii");
-						}
-					} else if (next == "V") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add(0, "I");
-						} else if (ri == 1) {
-							chords.add(0, "ii");
-						} else if (ri == 2) {
-							chords.add(0, "IV");
-						}
-					} else if (next == "vi") {
-						int ri = r.nextInt(2);
-						
-						if (ri == 0) {
-							chords.add(0, "I");
-						} else {
-							chords.add(0, "V");
-						}
-					} else if (next == "viio") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add(0, "I");
-						} else if (ri == 1) {
-							chords.add(0, "ii");
-						} else if (ri == 2) {
-							chords.add(0, "IV");
-						}
-					}
+					String[] possible = majorFlow.get(chords.get(0));
+					chords.add(0, possible[r.nextInt(possible.length)]);
 				}
 			}
 		} else if (scale == Scale.MINOR) {
@@ -116,84 +80,13 @@ public class ChordProgressionFactory {
 					if (ri == 0) {
 						chords.add("i");
 					} else if (ri == 1) {
+						chords.add("I");
+					} else if (ri == 2) {
 						chords.add("V");
 					}
 				} else {
-					String next = chords.get(0);
-					
-					if (next == "i" || next == "I") {
-						int ri = r.nextInt(6);
-						
-						if (ri >= 0 && ri <= 1) {
-							chords.add(0, "iv");
-						} else if (ri >= 2 && ri <= 4) {
-							chords.add(0, "V");
-						} else if (ri == 5) {
-							chords.add(0, "viio");
-						}
-					} else if (next == "iio") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add(0, "i");
-						} else if (ri == 1) {
-							chords.add(0, "III");
-						} else if (ri == 2) {
-							chords.add(0, "iv");
-						}
-					} else if (next == "III") {
-						int ri = r.nextInt(2);
-						
-						if (ri == 0) {
-							chords.add(0, "i");
-						} else if (ri == 1) {
-							chords.add(0, "VII");
-						}
-					} else if (next == "iv") {
-						int ri = r.nextInt(2);
-						
-						if (ri == 0) {
-							chords.add(0, "i");
-						} else if (ri == 1) {
-							chords.add(0, "III");
-						}
-					} else if (next == "V") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add(0, "i");
-						} else if (ri == 1) {
-							chords.add(0, "iio");
-						} else if (ri == 2) {
-							chords.add(0, "iv");
-						}
-					} else if (next == "VI") {
-						int ri = r.nextInt(2);
-						
-						if (ri == 0) {
-							chords.add(0, "i");
-						} else {
-							chords.add(0, "V");
-						}
-					} else if (next == "viio") {
-						int ri = r.nextInt(3);
-						
-						if (ri == 0) {
-							chords.add(0, "i");
-						} else if (ri == 1) {
-							chords.add(0, "ii");
-						} else if (ri == 2) {
-							chords.add(0, "IV");
-						}
-					} else if (next == "VII") {
-						int ri = r.nextInt(10);
-						
-						if (ri != 0) {
-							chords.add(0, "i");
-						} else {
-							chords.add(0, "iv");
-						}
-					}
+					String[] possible = minorFlow.get(chords.get(0));
+					chords.add(0, possible[r.nextInt(possible.length)]);
 				}
 			}
 		}

@@ -44,7 +44,7 @@ public class Chorale {
 		tenor = new ArrayList<Note>();
 		bass = new ArrayList<Note>();
 		
-		romanProg = ChordProgressionFactory.getBetterChordProg(key.getScale(), tsTop * length);
+		romanProg = ChordProgressionFactory.getChordProg(key.getScale(), tsTop * length);
 		
 		cp = new ChordProgression(romanProg);
 		
