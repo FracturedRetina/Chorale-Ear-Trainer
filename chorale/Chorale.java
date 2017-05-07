@@ -220,6 +220,61 @@ public class Chorale {
 		return sbS.toString() + sbA.toString() + sbT.toString() + sbB.toString() + sbC.toString();
 	}
 	
+	public String toVexTab() {
+		StringBuilder sb = new StringBuilder("tabstave notation=true tablature=false clef=treble time=");
+		
+		sb.append(tsTop);
+		sb.append('/');
+		sb.append(tsBottom);
+		
+		sb.append("\nnotes");
+		
+		for (int i = 0; i < cp.getChords().length; i++) {
+			sb.append(" (");
+			sb.append(Note.getToneStringWithoutOctave(soprano.get(i).getValue()));
+			sb.append('/');
+			sb.append(soprano.get(i).getOctave());
+			
+			sb.append(".");
+			
+			sb.append(Note.getToneStringWithoutOctave(alto.get(i).getValue()));
+			sb.append('/');
+			sb.append(alto.get(i).getOctave());
+			sb.append(")");
+			if ((i + 1) % tsTop == 0) {
+				sb.append(" |");
+			}
+		}
+		
+		sb.append("\ntabstave notation=true tablature=false clef=bass time=");
+		sb.append(tsTop);
+		sb.append('/');
+		sb.append(tsBottom);
+		
+		sb.append("\nnotes");
+		
+		for (int i = 0; i < cp.getChords().length; i++) {
+			sb.append(" (");
+			sb.append(Note.getToneStringWithoutOctave(tenor.get(i).getValue()));
+			sb.append('/');
+			sb.append(tenor.get(i).getOctave());
+			
+			sb.append(".");
+			
+			sb.append(Note.getToneStringWithoutOctave(bass.get(i).getValue()));
+			sb.append('/');
+			sb.append(bass.get(i).getOctave());
+			sb.append(")");
+			if ((i + 1) % tsTop == 0) {
+				sb.append(" |");
+			}
+		}
+		
+		
+		
+		return sb.toString();
+	}
+	
 	public int getTimeSigBottom() {
 		return tsBottom;
 	}
